@@ -2,7 +2,7 @@ import json
 
 import streamlit as st
 
-from insights.invoice_processor import InvoiceProcessor
+from src.insights.invoice_processor import InvoiceProcessor
 
 st.set_page_config(page_title="Invoice Data Extractor", page_icon="📄", layout="wide")
 

@@ -1,29 +1,34 @@
 version: '3.8'
-services:
-  invoice-app:
-    build: .
-    ports:
-      - "8501:8501"
-    volumes:
-      - .:/app
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-    depends_on:
-      - ollama
 
+services:
   ollama:
     image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
+    container_name: ollama
     volumes:
       - ollama_data:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+      - ./ollama_entrypoint.sh:/ollama_entrypoint.sh
+    environment:
+      - LLM_MODEL_VERSION=${LLM_MODEL_VERSION}
+    ports:
+      - "11434:11434"
+    entrypoint: ["/bin/bash", "/ollama_entrypoint.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:11434 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  myapp:
+    build: .
+    container_name: myapp
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_URL=http://localhost:11434
+      - LLM_MODEL_VERSION=${LLM_MODEL_VERSION}
+    ports:
+      - "8501:8501"
 
 volumes:
-  ollama_data: 
+  ollama_data:
+    driver: local

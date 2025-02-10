@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "insights"
+version = "0.1.0"
+description = ""
+authors = ["Amer Alnajdawi <amernajdawi8@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.10.14"
+streamlit = "^1.35.0"
+langchain="0.1.13"
+langchain-community="^0.0.29"
+python-dotenv="1.0.1"
+
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
